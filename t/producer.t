@@ -402,3 +402,89 @@ GET /t
 .*offset.*
 --- no_error_log
 [error]
+
+=== TEST 11: sasl SCRAM-SHA-256 simple send
+--- http_config eval: $::HttpConfig
+--- config
+    location /t {
+        content_by_lua '
+
+            local cjson = require "cjson"
+            local producer = require "resty.kafka.producer"
+
+            local broker_list = {
+                { host = "$TEST_NGINX_KAFKA_HOST", port = $TEST_NGINX_KAFKA_SASL_PORT ,
+                sasl_config = { mechanism="SCRAM-SHA-256", user="$TEST_NGINX_KAFKA_SASL_USER", password = "$TEST_NGINX_KAFKA_SASL_PWD" },},
+            }
+            local producer_config = {
+                 api_version = "auto",
+                 producer_type = "async",
+                 request_timeout = 3000,
+                 ssl_verify = false,
+                 sasl_config = sasl_config
+            }
+            local cluster_name = "my_cluster_name"
+
+            local message = "halo world"
+
+            local p = producer:new(broker_list,producer_config,cluster_name)
+
+            local offset, err = p:send("test", nil, message)
+            if not offset then
+                ngx.say("send err:", err)
+                return
+            end
+
+            ngx.say("offset: ", tostring(offset))
+        ';
+    }
+--- request
+GET /t
+--- response_body_like
+.*offset.*
+--- no_error_log
+[error]
+
+
+=== TEST 12: sasl SCRAM-SHA-512 simple send
+--- http_config eval: $::HttpConfig
+--- config
+    location /t {
+        content_by_lua '
+
+            local cjson = require "cjson"
+            local producer = require "resty.kafka.producer"
+
+            local broker_list = {
+                { host = "$TEST_NGINX_KAFKA_HOST", port = $TEST_NGINX_KAFKA_SASL_PORT ,
+                sasl_config = { mechanism="SCRAM-SHA-512", user="$TEST_NGINX_KAFKA_SASL_USER", password = "$TEST_NGINX_KAFKA_SASL_PWD" },},
+            }
+
+            local producer_config = {
+                 api_version = "auto",
+                 producer_type = "async",
+                 request_timeout = 3000,
+                 ssl_verify = false,
+                 sasl_config = sasl_config
+            }
+            local cluster_name = "my_cluster_name"
+
+            local message = "halo world"
+
+            local p = producer:new(broker_list,producer_config,cluster_name)
+
+            local offset, err = p:send("test", nil, message)
+            if not offset then
+                ngx.say("send err:", err)
+                return
+            end
+
+            ngx.say("offset: ", tostring(offset))
+        ';
+    }
+--- request
+GET /t
+--- response_body_like
+.*offset.*
+--- no_error_log
+[error]
