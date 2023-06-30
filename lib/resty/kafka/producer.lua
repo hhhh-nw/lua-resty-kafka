@@ -61,7 +61,7 @@ end
 
 
 local function produce_encode(self, topic_partitions)
-    local version = request.API_VERSION_V0
+    local version = request.API_VERSION_V1
     if not self.api_version then
         version = self.api_version 
     end
