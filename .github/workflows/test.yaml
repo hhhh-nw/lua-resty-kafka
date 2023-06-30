@@ -70,6 +70,7 @@ jobs:
               username="admin"
               password="admin-secret";}; ''' | sudo tee /usr/local/kafka/config/kafka_server_jass.conf
           sudo cat /usr/local/kafka/config/kafka_server_jass.conf
+          sudo sudo sed -i 's#\"\/\\1#\/\\1#g' $base_dir/kafka-run-class.sh
           sudo sed  -i '$c\exec $base_dir/kafka-run-class.sh $EXTRA_ARGS -Djava.security.auth.login.config=/usr/local/kafka/config/zk_server_jass.conf org.apache.zookeeper.server.quorum.QuorumPeerMain "$@"' /usr/local/kafka/bin/zookeeper-server-start.sh
           sudo /usr/local/kafka/bin/zookeeper-server-start.sh -daemon /usr/local/kafka/config/zookeeper.properties
 
