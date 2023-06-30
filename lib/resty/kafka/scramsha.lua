@@ -217,7 +217,7 @@ end
 function _M.send_first_message(self,msg)
     local cli_id = "worker" .. pid()
     local req = request:new(request.SaslAuthenticateRequest, 0, cli_id,
-            request.API_VERSION_V1)
+            request.API_VERSION_V0)
     req:bytes(msg)
 
     local resp, err = self:sock_send_receive(req)
