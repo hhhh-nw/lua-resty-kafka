@@ -9,7 +9,7 @@ on:
       - master
 
 env:
-  KAFKA_VER: 2.8.0
+  KAFKA_VER: 1.0.2
   SCALA_VER: 2.12
   OPENRESTY_VER: 1.21.4.1
   RESTY_OPENSSL_VER: 0.8.22
