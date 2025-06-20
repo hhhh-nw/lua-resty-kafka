@@ -19,7 +19,7 @@ jobs:
   run-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/niuwei1
         with:
           submodules: recursive
 
